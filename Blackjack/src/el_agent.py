@@ -7,6 +7,7 @@ class ELAgent:
         self.Q = {}
         self.epsilon = epsilon
         self.reward_log = []
+        self.summary_reward = 0
 
     def epsilon_greedy_policy(self, state, actions):
         # np.random.random()は標準のrandom.random()より早くて偏りがなく、推測しにくいらしい
@@ -23,5 +24,10 @@ class ELAgent:
 
     def show_reward_log(self):
         # TODO:たまったreward_logを使ってうまく表示させる処理
+        print('sum_reward: {}'.format(self.summary_reward))
+        print('Q log')
+        for key, value in self.Q.items():
+            print(str(key) + '->' + str(value))
+        print('state log')
         for log in self.reward_log:
             print(log)

@@ -26,7 +26,8 @@ class QLearnAgent(ELAgent):
             while not done:
                 if render:
                     env.render()
-                if my_hand == 21:
+                # 多分Q_learnなので学習ガッツリさせればこんな条件いらない・・・
+                if my_hand == 21 or (my_hand == 10 and usable_ace):
                     select_action = 0
                 else:
                     select_action = self.epsilon_greedy_policy(concat_state, actions)
@@ -41,6 +42,7 @@ class QLearnAgent(ELAgent):
                 concat_state = concat_next_state
             else:
                 self.append_log('state:{state} -> reward: {reward}'.format(state=concat_state, reward=reward))
+                self.summary_reward += reward
 
             if episode != 0 and episode % report_interval == 0:
                 self.show_reward_log()
