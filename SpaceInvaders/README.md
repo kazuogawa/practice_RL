@@ -1,1 +1,0 @@
-https://gym.openai.com/envs/SpaceInvaders-v0/
