@@ -1,1 +1,1 @@
-http://gym.openai.com/envs/Acrobot-v1/
+http://gym.openai.com/envs/Blackjack-v0/
