@@ -1,4 +1,5 @@
 import numpy as np
+from enum import Enum
 
 
 class ELAgent:
@@ -9,6 +10,12 @@ class ELAgent:
         self.reward_log = []
         self.summary_reward = 0
 
+    class Action(Enum):
+        # カードを引かずに現在の手で勝負すること
+        STAND = 0
+        # カードをもう一枚引くこと
+        HIT = 1
+
     def create_state(self, my_hand, dealer_hand, usable_ace):
         # 11以上でAceを持っていても1を11にするとoverしてしまい意味はないので、stateを共通化
         # return '{},{}'.format(my_hand, dealer_hand) if my_hand > 11 else '{},{},{}'.format(my_hand, dealer_hand, usable_ace)
@@ -16,10 +23,10 @@ class ELAgent:
 
     def epsilon_greedy_policy(self, state, actions):
         # np.random.random()は標準のrandom.random()より早くて偏りがなく、推測しにくいらしい
-        if np.random.random() >= self.epsilon and state in self.Q :
-            return np.argmax(self.Q[state])
+        if np.random.random() >= self.epsilon and state in self.Q:
+            return actions[np.argmax(self.Q[state])]
         else:
-            return np.random.randint(len(actions))
+            return np.random.choice(actions)
 
     def init_log(self):
         self.reward_log = []

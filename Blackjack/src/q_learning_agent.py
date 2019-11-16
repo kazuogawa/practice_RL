@@ -13,8 +13,8 @@ class QLearnAgent(ELAgent):
         # ないと怒られるので書いておく・・・
         reward = 0
         self.init_log()
-        # 取れるactionのkeyのlist. TODO:わかりにくいのでcase classのような物で代入したい
-        actions = list(range(env.action_space.n))
+        # 取れるactionのkeyのlist.わかりやすくするためにEnumを使っている.list(range(env.action_space.n))と同じ
+        actions = [self.Action.STAND, self.Action.HIT]
         self.Q = defaultdict(lambda: [0] * len(actions))
         for episode in range(episode_count):
             # (自分の手札の合計,相手の手札,1を11として使えるか否か)が返ってくる
@@ -25,19 +25,20 @@ class QLearnAgent(ELAgent):
             while not done:
                 # 多分Q_learnなので学習ガッツリさせればこんな条件いらない・・・
                 if my_hand == 21 or (my_hand == 10 and usable_ace):
-                    select_action = 0
+                    select_action = self.Action.STAND.value
                 elif my_hand < 9 and not usable_ace:
-                    select_action = 1
+                    select_action = self.Action.HIT.value
                 else:
-                    select_action = self.epsilon_greedy_policy(concat_state, actions)
+                    select_action = self.epsilon_greedy_policy(concat_state, actions).value
 
                 next_state, reward, done, info = env.step(select_action)
                 next_my_hand, next_dealer_hand, next_usable_ace = next_state[0], next_state[1], next_state[2]
                 concat_next_state = self.create_state(next_my_hand, next_dealer_hand, next_usable_ace)
                 # 勝負が終わっている時はconcat_next_stateは存在しないため、rewardのみをいれる
                 gain = reward if done else reward + gamma * max(self.Q[concat_next_state])
-                # TODO:epsilon greedyにいれかたを考える必要がある
                 estimated = self.Q[concat_state][select_action]
+                # V(s_t) ← V(s_t) + a(r_{t+1} + ¥gamma V(s_{t+1} - V(s_t))
+                # TODO: s_{t+1}がs_Tのときはこれでいいのか？
                 self.Q[concat_state][select_action] += learning_rate * (gain - estimated)
                 concat_state = concat_next_state
             else:
