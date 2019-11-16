@@ -34,11 +34,8 @@ class QLearnAgent(ELAgent):
                 next_state, reward, done, info = env.step(select_action)
                 next_my_hand, next_dealer_hand, next_usable_ace = next_state[0], next_state[1], next_state[2]
                 concat_next_state = self.create_state(next_my_hand, next_dealer_hand, next_usable_ace)
-                # 勝負が終わっている時はconcat_next_stateは存在していない
-                if done:
-                    gain = reward
-                else:
-                    gain = reward + gamma * max(self.Q[concat_next_state])
+                # 勝負が終わっている時はconcat_next_stateは存在しないため、rewardのみをいれる
+                gain = reward if done else reward + gamma * max(self.Q[concat_next_state])
                 # TODO:epsilon greedyにいれかたを考える必要がある
                 estimated = self.Q[concat_state][select_action]
                 self.Q[concat_state][select_action] += learning_rate * (gain - estimated)
