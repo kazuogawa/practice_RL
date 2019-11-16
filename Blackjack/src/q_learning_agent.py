@@ -17,7 +17,7 @@ class QLearnAgent(ELAgent):
         actions = list(range(env.action_space.n))
         self.Q = defaultdict(lambda: [0] * len(actions))
         for episode in range(episode_count):
-            # (自分の手札の合計,相手の手札,11を1として使えるか否か)が返ってくる
+            # (自分の手札の合計,相手の手札,1を11として使えるか否か)が返ってくる
             # https://github.com/openai/gym/blob/52e66f38081548e38711f51d4439d8bcc136d19e/gym/envs/toy_text/blackjack.py#L110
             my_hand, dealer_hand, usable_ace = env.reset()
             concat_state = self.create_state(my_hand, dealer_hand, usable_ace)
