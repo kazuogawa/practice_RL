@@ -9,6 +9,8 @@ class ELAgent:
         self.epsilon = epsilon
         self.reward_log = []
         self.summary_reward = 0
+        self.win_count = 0
+        self.lose_count = 0
 
     class Action(Enum):
         # カードを引かずに現在の手で勝負すること
@@ -37,10 +39,13 @@ class ELAgent:
     def show_reward_log(self):
         # TODO:たまったreward_logを使ってうまく表示させる処理
         print('sum_reward: {}'.format(self.summary_reward))
+        print('win_count: {}, lose_count: {}, win_rate: {}'.format(
+            str(self.win_count), str(self.lose_count),
+            str(self.win_count / (self.win_count + self.lose_count))))
 
-        print('my_hand,dealer_hand,usable_ace,no_draw_reward,draw_reward')
-        for key, value in self.Q.items():
-            print('{key},{value}'.format(key=str(key), value=str(value)))
-        print('state log')
-        for log in self.reward_log:
-            print(log)
+        # print('my_hand,dealer_hand,usable_ace,no_draw_reward,draw_reward')
+        # for key, value in self.Q.items():
+        #    print('{key},{value}'.format(key=str(key), value=str(value)))
+        # print('state log')
+        # for log in self.reward_log:
+        #    print(log)

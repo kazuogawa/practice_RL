@@ -24,7 +24,7 @@ class QLearnAgent(ELAgent):
             done = False
             while not done:
                 # 多分Q_learnなので学習ガッツリさせればこんな条件いらない・・・
-                if my_hand == 21 or (my_hand == 10 and usable_ace):
+                if my_hand == 21 or (my_hand == 11 and usable_ace):
                     select_action = self.Action.STAND.value
                 elif my_hand < 9 and not usable_ace:
                     select_action = self.Action.HIT.value
@@ -44,3 +44,7 @@ class QLearnAgent(ELAgent):
             else:
                 self.append_log('{state},{reward}'.format(state=concat_state, reward=reward))
                 self.summary_reward += reward
+                if reward == 1:
+                    self.win_count += 1
+                else:
+                    self.lose_count += 1
