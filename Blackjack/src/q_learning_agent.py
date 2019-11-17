@@ -24,12 +24,12 @@ class QLearnAgent(ELAgent):
             done = False
             while not done:
                 # 多分Q_learnなので学習ガッツリさせればこんな条件いらない・・・
-                if my_hand == 21 or (my_hand == 11 and usable_ace):
-                    select_action = self.Action.STAND.value
-                elif my_hand < 9 and not usable_ace:
-                    select_action = self.Action.HIT.value
-                else:
-                    select_action = self.epsilon_greedy_policy(concat_state, actions).value
+                #if my_hand == 21 or (my_hand == 11 and usable_ace):
+                #    select_action = self.Action.STAND.value
+                #elif my_hand < 9 and not usable_ace:
+                #    select_action = self.Action.HIT.value
+                #else:
+                select_action = self.epsilon_greedy_policy(concat_state, actions).value
 
                 next_state, reward, done, info = env.step(select_action)
                 next_my_hand, next_dealer_hand, next_usable_ace = next_state[0], next_state[1], next_state[2]
