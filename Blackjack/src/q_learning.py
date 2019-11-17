@@ -3,22 +3,28 @@
 
 import gym
 from q_learning_agent import QLearnAgent
+import time
 
 
-def train(gym_env):
+def train(gym_env, episode_count=10000):
     agent = QLearnAgent()
-    agent.learn(env=gym_env, episode_count=10000)
-    # agent.show_reward_log()
+    agent.learn(env=gym_env, episode_count=episode_count)
+    agent.show_reward_log()
     # TODO: agentにQが溜まるのでどうにかみる
     return agent
 
 
-def test(gym_env, agent):
-    agent.learn(env=gym_env, episode_count=10000)
-    agent.show_reward_log()
+def test(gym_env, agent, episode_count=10000):
+    agent.learn(env=gym_env, episode_count=episode_count)
+    #agent.show_reward_log()
 
 
 if __name__ == "__main__":
     env = gym.make('Blackjack-v0')
-    traning_agent = train(env)
-    test(env, traning_agent)
+    start = time.time()
+    # 1000000回で110sくらい。
+    episode_count = 1000000
+    training_agent = train(env, episode_count=episode_count)
+    test(env, training_agent, episode_count=episode_count)
+    end = time.time()
+    print('episode_count: {}, execute time: {}'.format(str(episode_count), str(end - start)))
