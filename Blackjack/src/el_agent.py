@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from enum import Enum
 
 
@@ -8,9 +9,6 @@ class ELAgent:
         self.Q = {}
         self.epsilon = epsilon
         self.reward_log = []
-        self.summary_reward = 0
-        self.win_count = 0
-        self.lose_count = 0
 
     class Action(Enum):
         # カードを引かずに現在の手で勝負すること
@@ -36,16 +34,32 @@ class ELAgent:
     def append_log(self, reward):
         self.reward_log.append(reward)
 
-    def show_reward_log(self):
-        # TODO:たまったreward_logを使ってうまく表示させる処理
-        print('sum_reward: {}'.format(self.summary_reward))
-        print('win_count: {}, lose_count: {}, win_rate: {}'.format(
-            str(self.win_count), str(self.lose_count),
-            str(self.win_count / (self.win_count + self.lose_count))))
+    def show_learning_log(self, episode):
+        interval = 50
+        rewards = self.reward_log[-interval:]
+        mean = np.round(np.mean(rewards), 3)
+        std = np.round(np.std(rewards), 3)
+        print("At Episode {} average reward is {} (+/-{}).".format(
+            episode, mean, std
+        ))
 
-        # print('my_hand,dealer_hand,usable_ace,no_draw_reward,draw_reward')
-        # for key, value in self.Q.items():
-        #    print('{key},{value}'.format(key=str(key), value=str(value)))
-        # print('state log')
-        # for log in self.reward_log:
-        #    print(log)
+    def show_reward_log(self, episode_count):
+        interval = int(episode_count / 100)
+        indices = list(range(0, len(self.reward_log), interval))
+        means = []
+        stds = []
+        for i in indices:
+            rewards = self.reward_log[i:(i + interval)]
+            means.append(np.mean(rewards))
+            stds.append(np.std(rewards))
+        means = np.array(means)
+        stds = np.array(stds)
+        plt.figure()
+        plt.title("Reward History")
+        plt.grid()
+        plt.fill_between(indices, means - stds, means + stds,
+                         alpha=0.1, color="g")
+        plt.plot(indices, means, "o-", color="g",
+                 label="Rewards for each {} episode".format(interval))
+        plt.legend(loc="best")
+        plt.show()

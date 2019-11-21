@@ -23,12 +23,6 @@ class QLearnAgent(ELAgent):
             concat_state = self.create_state(my_hand, dealer_hand, usable_ace)
             done = False
             while not done:
-                # 多分Q_learnなので学習ガッツリさせればこんな条件いらない・・・
-                #if my_hand == 21 or (my_hand == 11 and usable_ace):
-                #    select_action = self.Action.STAND.value
-                #elif my_hand < 9 and not usable_ace:
-                #    select_action = self.Action.HIT.value
-                #else:
                 select_action = self.epsilon_greedy_policy(concat_state, actions).value
 
                 next_state, reward, done, info = env.step(select_action)
@@ -42,9 +36,5 @@ class QLearnAgent(ELAgent):
                 self.Q[concat_state][select_action] += learning_rate * (gain - estimated)
                 concat_state = concat_next_state
             else:
-                self.append_log('{state},{reward}'.format(state=concat_state, reward=reward))
-                self.summary_reward += reward
-                if reward == 1:
-                    self.win_count += 1
-                else:
-                    self.lose_count += 1
+                self.append_log(reward)
+                #self.show_learning_log(episode=episode)
