@@ -21,9 +21,11 @@ class ELAgent:
         # return '{},{}'.format(my_hand, dealer_hand) if my_hand > 11 else '{},{},{}'.format(my_hand, dealer_hand, usable_ace)
         return '{},{},{}'.format(my_hand, dealer_hand, usable_ace)
 
-    def epsilon_greedy_policy(self, state, actions):
+    def epsilon_greedy_policy(self, state, actions, epsilon=None):
         # np.random.random()は標準のrandom.random()より早くて偏りがなく、推測しにくいらしい
-        if np.random.random() >= self.epsilon:
+        if epsilon is None:
+            epsilon = self.epsilon
+        if np.random.random() >= epsilon:
             return actions[np.argmax(self.Q[state])]
         else:
             return np.random.choice(actions)

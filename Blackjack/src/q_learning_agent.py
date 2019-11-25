@@ -39,11 +39,13 @@ class QLearnAgent(ELAgent):
             my_hand, dealer_hand, usable_ace = env.reset()
             concat_state = self.create_state(my_hand, dealer_hand, usable_ace)
             while True:
-                select_action = actions[int(np.argmax(self.Q[concat_state]))].value
+                select_action = self.epsilon_greedy_policy(concat_state, actions, 0.0).value
                 next_state, reward, done, info = env.step(select_action)
                 next_my_hand, next_dealer_hand, next_usable_ace = next_state[0], next_state[1], next_state[2]
                 concat_next_state = self.create_state(next_my_hand, next_dealer_hand, next_usable_ace)
                 concat_state = concat_next_state
                 if done:
                     self.test_reward_log.append(reward)
+                    if episode % 1000 == 0:
+                        print(episode, np.mean(self.test_reward_log))
                     break
