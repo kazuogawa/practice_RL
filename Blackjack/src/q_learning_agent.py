@@ -36,6 +36,8 @@ class QLearnAgent(ELAgent):
             else:
                 self.train_reward_log.append(reward)
             # test
+            # TODO: 100 episodeごとにtestするのを試す
+            # TODO: 上の学習するときの処理とほぼ同じなので、可能であればdefに切り抜いてまとめる
             my_hand, dealer_hand, usable_ace = env.reset()
             concat_state = self.create_state(my_hand, dealer_hand, usable_ace)
             while True:
